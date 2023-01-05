@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -64,6 +66,7 @@ public class Product implements Serializable{
 		this.price = price;
 	}
 	
+	@JsonIgnore
 	public List<Category> getCategories() {
 		return categories;
 	}
