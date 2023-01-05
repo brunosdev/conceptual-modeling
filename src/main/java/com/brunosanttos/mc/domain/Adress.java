@@ -3,9 +3,21 @@ package com.brunosanttos.mc.domain;
 import java.io.Serializable;
 import java.util.Objects;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+
+@Entity
 public class Adress implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String publicPlace;
 	private String number;
@@ -13,8 +25,12 @@ public class Adress implements Serializable{
 	private String district;
 	private String zipCode;
 	
+	@ManyToOne
+	@JoinColumn(name = "client_id")
 	private Client client;
 	
+	@ManyToOne
+	@JoinColumn(name = "city_id")
 	private City city;
 	
 	public Adress() {
@@ -81,6 +97,7 @@ public class Adress implements Serializable{
 		this.zipCode = zipCode;
 	}
 	
+	@JsonIgnore
 	public Client getClient() {
 		return client;
 	}
