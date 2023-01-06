@@ -13,6 +13,7 @@ import com.brunosanttos.mc.domain.Category;
 import com.brunosanttos.mc.domain.City;
 import com.brunosanttos.mc.domain.Client;
 import com.brunosanttos.mc.domain.Order;
+import com.brunosanttos.mc.domain.OrderItem;
 import com.brunosanttos.mc.domain.Payment;
 import com.brunosanttos.mc.domain.PaymentCard;
 import com.brunosanttos.mc.domain.PaymentSlip;
@@ -24,6 +25,7 @@ import com.brunosanttos.mc.repositories.AdressRepository;
 import com.brunosanttos.mc.repositories.CategoryRepository;
 import com.brunosanttos.mc.repositories.CityRepository;
 import com.brunosanttos.mc.repositories.ClientRepository;
+import com.brunosanttos.mc.repositories.OrderItemRepository;
 import com.brunosanttos.mc.repositories.OrderRepository;
 import com.brunosanttos.mc.repositories.PaymentRepository;
 import com.brunosanttos.mc.repositories.ProductRepository;
@@ -59,6 +61,9 @@ public class McApplication implements CommandLineRunner {
 	
 	@Autowired
 	PaymentRepository paymentRepository;
+	
+	@Autowired
+	OrderItemRepository orderItemRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -121,5 +126,19 @@ public class McApplication implements CommandLineRunner {
 		
 		orderRepository.saveAll(Arrays.asList(o1, o2));
 		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
+		
+		OrderItem oi1 = new OrderItem(o1, p1, 0.00, 1, 2000.00);
+		OrderItem oi2 = new OrderItem(o1, p3, 0.00, 2, 80.00);
+		OrderItem oi3 = new OrderItem(o1, p2, 100.00, 1, 800.00);
+		
+		o1.getItems().addAll(Arrays.asList(oi1, oi2));
+		o2.getItems().addAll(Arrays.asList(oi3));
+		
+		p1.getItems().addAll(Arrays.asList(oi1));
+		p2.getItems().addAll(Arrays.asList(oi3));
+		p3.getItems().addAll(Arrays.asList(oi2));
+		
+		orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3));
+		productRepository.saveAll(Arrays.asList(p1, p2, p3));		
 	}
 }
