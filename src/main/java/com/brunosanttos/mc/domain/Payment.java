@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Objects;
 
 import com.brunosanttos.mc.domain.enums.PaymentStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -54,6 +55,7 @@ public abstract class Payment implements Serializable{
 		this.status = status.getCod();
 	}
 
+	@JsonIgnore
 	public Order getOrder() {
 		return order;
 	}

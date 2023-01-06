@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import com.brunosanttos.mc.domain.enums.ClientType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
@@ -101,6 +102,7 @@ public class Client implements Serializable{
 		return phones;
 	}
 	
+	@JsonIgnore
 	public List<Order> getOrders() {
 		return orders;
 	}
