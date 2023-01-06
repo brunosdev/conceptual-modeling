@@ -1,5 +1,6 @@
 package com.brunosanttos.mc;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,13 +12,20 @@ import com.brunosanttos.mc.domain.Adress;
 import com.brunosanttos.mc.domain.Category;
 import com.brunosanttos.mc.domain.City;
 import com.brunosanttos.mc.domain.Client;
+import com.brunosanttos.mc.domain.Order;
+import com.brunosanttos.mc.domain.Payment;
+import com.brunosanttos.mc.domain.PaymentCard;
+import com.brunosanttos.mc.domain.PaymentSlip;
 import com.brunosanttos.mc.domain.Product;
 import com.brunosanttos.mc.domain.State;
 import com.brunosanttos.mc.domain.enums.ClientType;
+import com.brunosanttos.mc.domain.enums.PaymentStatus;
 import com.brunosanttos.mc.repositories.AdressRepository;
 import com.brunosanttos.mc.repositories.CategoryRepository;
 import com.brunosanttos.mc.repositories.CityRepository;
 import com.brunosanttos.mc.repositories.ClientRepository;
+import com.brunosanttos.mc.repositories.OrderRepository;
+import com.brunosanttos.mc.repositories.PaymentRepository;
 import com.brunosanttos.mc.repositories.ProductRepository;
 import com.brunosanttos.mc.repositories.StateRepository;
 
@@ -45,6 +53,12 @@ public class McApplication implements CommandLineRunner {
 	
 	@Autowired
 	ClientRepository clientRepository;
+	
+	@Autowired
+	OrderRepository orderRepository;
+	
+	@Autowired
+	PaymentRepository paymentRepository;
 
 	@Override
 	public void run(String... args) throws Exception {
@@ -89,5 +103,23 @@ public class McApplication implements CommandLineRunner {
 		
 		clientRepository.saveAll(Arrays.asList(cli1));
 		adressRepository.saveAll(Arrays.asList(a1, a2));
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+		
+		Order o1 = new Order(null, sdf.parse("30/09/2017 10:32"), cli1, a1);
+		Order o2 = new Order(null, sdf.parse("10/10/2017 19:35"), cli1, a2);
+		
+		Payment pay1 = new PaymentCard(null, PaymentStatus.SETTLED, o1, 6);
+		
+		o1.setPayment(pay1);
+		
+		Payment pay2 = new PaymentSlip(null, PaymentStatus.PENDING, o2, sdf.parse("20/10/2017 00:00"), null);
+		
+		o2.setPayment(pay2);
+		
+		cli1.getOrders().addAll(Arrays.asList(o1, o2));
+		
+		orderRepository.saveAll(Arrays.asList(o1, o2));
+		paymentRepository.saveAll(Arrays.asList(pay1, pay2));
 	}
 }
